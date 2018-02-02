@@ -15,16 +15,12 @@ jobs:
             - node_modules
           key: npm-v1-{{ checksum "package.json" }}
   deploy-staging:
-    docker:
-      - image: node:9.5.0
     machine: true
     working_directory: ~/app
     steps:
       - checkout
       - run: make deploy ENV=staging TAG=${CIRCLE_SHA1}
   deploy-production:
-    docker:
-      - image: node:9.5.0
     machine: true
     working_directory: ~/app
     steps:
