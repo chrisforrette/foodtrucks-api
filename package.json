@@ -1,0 +1,94 @@
+{
+  "name": "foodtrucks-api",
+  "version": "0.1.0",
+  "description": "Food Trucks API",
+  "engines": {
+    "node": ">=9"
+  },
+  "main": "index.js",
+  "scripts": {
+    "check-coverage": "nyc report --reporter=text-summary && nyc check-coverage",
+    "coverage": "NODE_ENV=test nyc --reporter=lcov mocha",
+    "dev": "nodemon index.js",
+    "lint": "eslint . --quiet",
+    "mocha": "mocha",
+    "start": "nodemon cluster.js",
+    "test": "npm run -s lint && npm run -s coverage && npm run -s check-coverage",
+    "watch:coverage": "nodemon --exec 'npm run -s coverage && npm run -s check-coverage' -w app -w test",
+    "watch:lint": "NODE_ENV=test nodemon --exec 'npm run lint' -w app -w test",
+    "watch:mocha": "NODE_ENV=test nodemon --exec 'npm run mocha' -w app -w test",
+    "watch:test": "NODE_ENV=test nodemon --exec 'npm run test' -w app -w test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisforrette/foodtrucks-api.git"
+  },
+  "author": "Chris Forrette <chris@chrisforrette.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chrisforrette/foodtrucks-api/issues"
+  },
+  "homepage": "https://github.com/chrisforrette/foodtrucks-api#readme",
+  "dependencies": {
+    "boom": "^7.1.1",
+    "convict": "^4.0.2",
+    "dotenv": "^5.0.0",
+    "hapi": "^16.6.2",
+    "hapi-raven": "^7.0.0",
+    "hapi-require-https": "^3.0.0",
+    "joi": "^13.1.1",
+    "lodash": "^4.17.4",
+    "nodemon": "^1.14.11",
+    "pg": "^6.4.2",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.32.2",
+    "sequelize-cli": "^3.2.0",
+    "strong-cluster-control": "^2.2.3",
+    "winston": "^2.4.0",
+    "winston-raven-sentry": "^1.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.16.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "faker": "^4.1.0",
+    "mocha": "^5.0.0",
+    "nyc": "^11.4.1",
+    "rewire": "^2.5.2",
+    "sinon": "^4.2.2",
+    "yargs": "^11.0.0"
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.test.js",
+      "app/models/migrations"
+    ],
+    "statements": 50,
+    "branches": 50,
+    "functions": 50,
+    "lines": 50,
+    "watermarks": {
+      "statements": [
+        70,
+        80
+      ],
+      "branches": [
+        70,
+        80
+      ],
+      "functions": [
+        70,
+        80
+      ],
+      "lines": [
+        70,
+        80
+      ]
+    }
+  }
+}
