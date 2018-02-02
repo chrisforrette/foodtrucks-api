@@ -25,7 +25,7 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - run: make deploy ENV=production TAG=${CIRCLE_TAG}
+      - run: make deploy ENV="production" TAG="${CIRCLE_TAG}"
 workflows:
   version: 2
   test-and-deploy:
@@ -39,7 +39,7 @@ workflows:
             - test
           filters:
             branches:
-              only: setup
+              only: master
             tags:
               ignore: /.*/
       - deploy-production:
