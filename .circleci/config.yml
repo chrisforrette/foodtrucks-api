@@ -19,7 +19,7 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - run: export TAG = ${CIRCLE_SHA1}
+      - run: export TAG=${CIRCLE_SHA1}
       - run:
           command: make deploy
           environment:
