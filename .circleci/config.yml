@@ -1,0 +1,54 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: node:9.5.0
+    working_directory: ~/app
+    steps:
+      - checkout
+      - restore_cache:
+          key: npm-v1-{{ checksum "package.json" }}
+      - run: npm i
+      - run: npm test
+      - save_cache:
+          paths:
+            - node_modules
+          key: npm-v1-{{ checksum "package.json" }}
+  deploy-staging:
+    docker:
+      - image: node:9.5.0
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run: make deploy ENV=staging TAG=${CIRCLE_SHA1}
+  deploy-production:
+    docker:
+      - image: node:9.5.0
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run: make deploy ENV=production TAG=${CIRCLE_TAG}
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /.*/
+      - deploy-staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/
+      - deploy-production:
+          requires:
+            - test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/

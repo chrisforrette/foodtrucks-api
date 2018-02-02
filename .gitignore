@@ -57,3 +57,7 @@ typings/
 # dotenv environment variables file
 .env
 
+# Terraform
+*.tfplan
+*.tfstate
+*.tfstate.backup
