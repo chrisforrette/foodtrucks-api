@@ -17,6 +17,7 @@ jobs:
   deploy-staging:
     docker:
       - image: node:9.5.0
+    machine: true
     working_directory: ~/app
     steps:
       - checkout
@@ -24,6 +25,7 @@ jobs:
   deploy-production:
     docker:
       - image: node:9.5.0
+    machine: true
     working_directory: ~/app
     steps:
       - checkout
