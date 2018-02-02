@@ -2,7 +2,7 @@
 
 # Heroku container service deployment script
 
-docker login --username="${HEROKU_EMAIL}" --password="${HEROKU_AUTH_TOKEN}" registry.heroku.com
-docker build --rm=false --build-arg RELEASE="${TAG}" -t food-trucks-api/${TAG} .;
-docker tag food-trucks-api/${TAG} registry.heroku.com/${HEROKU_APP}/web;
-docker push registry.heroku.com/${HEROKU_APP}/web;
+echo "${HEROKU_AUTH_TOKEN}" | docker login --username "${HEROKU_EMAIL}" --password-stdin registry.heroku.com;
+docker build --rm=false -t food-trucks-api/${TAG} .;
+docker tag food-trucks-api/${TAG} registry.heroku.com/${ENV}-food-trucks-api/web;
+docker push registry.heroku.com/${ENV}-food-trucks-api/web;

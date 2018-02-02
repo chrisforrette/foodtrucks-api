@@ -8,7 +8,7 @@ deploy:
 	# Example: `make deploy ENV="staging" TAG="2.0.5"`
 	@test "${ENV}" || (echo '$$ENV variable required' && exit 1)
 	@test "${TAG}" || (echo '$$TAG variable required' && exit 1)
-	@bash scripts/deploy.sh
+	HEROKU_EMAIL="${HEROKU_EMAIL}" HEROKU_AUTH_TOKEN="${HEROKU_AUTH_TOKEN}" scripts/deploy.sh;
 
 plan:
 	# Create plan for environment changes, requires HEROKU_AUTH_TOKEN and
@@ -32,7 +32,4 @@ destroy:
 	@test "${HEROKU_EMAIL}" || (echo '$$HEROKU_EMAIL variable required, authenticate with the Heroku CLI and this will fill in automatically' && exit 1)
 	cd ./terraform && terraform destroy -state $(ENV).tfstate -var 'heroku_email=$(HEROKU_EMAIL)' -var 'heroku_auth_token=$(HEROKU_AUTH_TOKEN)' -var 'environment=$(ENV)' -force;
 
-tester:
-	echo ${STUFF}
-
-.PHONY: lint test deploy plan apply destroy deploy
+.PHONY: deploy plan apply destroy
