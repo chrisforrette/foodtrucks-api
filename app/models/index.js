@@ -1,4 +1,4 @@
-const sequelize = require('../clients/sequelize')
+// const sequelize = require('../clients/sequelize')
 
 // Build model object
 
