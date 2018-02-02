@@ -37,3 +37,9 @@ Assuming the plan looks correct, apply it, provisioning server components:
 ```sh
 make apply ENV=staging
 ```
+
+## CircleCI
+
+CircleCI is configured to automatically deploy everything merged to `master` to a staging environment, and to deploy every [Semver](https://semver.org/)-like tag (e.g. v1.5.2) to a production environment. In order to do that, those environments must be set up first using Terraform following the [Provisioning](#provisioning) instructions above, and the CircleCI project needs `HEROKU_EMAIL` and `HEROKU_AUTH_TOKEN` environment variables in order to successfully execute the deployment script at `scripts/deploy.sh`.
+
+To set these, go into the CircleCI project settings for this project, go into "Environment Variables", set `HEROKU_EMAIL` to the email of the Heroku account, and `HEROKU_AUTH_TOKEN` can be grabbed by running this with the Heroku CLI: `heroku auth:token`.
