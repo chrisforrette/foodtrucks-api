@@ -1,9 +1,9 @@
-// const sequelize = require('../clients/sequelize')
+const sequelize = require('../clients/sequelize')
 
 // Build model object
 
 const models = {
-  // sequelize.import()
+  FoodTruck: sequelize.import('./food_truck')
 }
 
 // Apply relationships
