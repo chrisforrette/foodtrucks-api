@@ -55,24 +55,32 @@ function importData (file) {
     .then(rows => rows.map(mapDataForModel))
     .then(rows => Bluebird.map(
       rows,
-      row => models.FoodTruck
-        // Find or create each row, keeping track of how many we're
-        // creating/skipping for logging at the end
-        .findOrCreate({
-          where: { source_id: row.source_id },
-          defaults: row
-        })
-        .tap(([ instace, created ]) => {
-          if (created) {
-            stats.created++
-          } else {
-            stats.skipped++
-          }
-        })
-        .catch(error => {
-          logger.error('Error finding/creating row', { row, error })
+      row => {
+        if (row.latitude === 0 || row.longitude === 0) {
+          logger.warn('Skipping row with insufficient latitude/longitude', { row })
           stats.skipped++
-        })
+          return null
+        }
+
+        return models.FoodTruck
+          // Find or create each row, keeping track of how many we're
+          // creating/skipping for logging at the end
+          .findOrCreate({
+            where: { source_id: row.source_id },
+            defaults: row
+          })
+          .tap(([ instace, created ]) => {
+            if (created) {
+              stats.created++
+            } else {
+              stats.skipped++
+            }
+          })
+          .catch(error => {
+            logger.error('Error finding/creating row', { row, error })
+            stats.skipped++
+          })
+      }
     ))
     .then(() => {
       logger.info('%d New rows created', stats.created)
