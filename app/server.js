@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const Hapi = require('hapi')
+const HapiError = require('hapi-error')
 const HapiRequireHTTPS = require('hapi-require-https')
 const config = require('./config')
 const routes = require('./routes')
@@ -25,7 +26,7 @@ server.connection(connectionConfig)
 
 // Configure plugins
 
-const plugins = []
+const plugins = [HapiError]
 
 // Require HTTPS for staging and production environments
 

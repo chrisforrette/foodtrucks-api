@@ -29,7 +29,7 @@ const mapDataForModel = row => ({
   facility_type: row.FacilityType,
   status: row.Status,
   // Replacing colons here as they seem to be used kinda like commas in the data set...
-  food_items: row.FoodItems.replace(':', ','),
+  food_items: row.FoodItems.replace(/:/g, ','),
   days_hours: row.dayshours,
   address: row.Address,
   latitude: parseFloat(row.Latitude),
