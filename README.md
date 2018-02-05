@@ -9,11 +9,32 @@
 
 ## Quick Start
 
+### Create a Postgres DB
+
+```sh
+createdb foodtrucks
+```
+
+Create a `.env` file in the root of the project and drop in the DB URL, swapping in your own username/password:
+
+```sh
+DATABASE_URL="postgres://yourusername:yourpassword@localhost/foodtrucks"
+```
+
+Build the tables in the database (if you've done this before, it _will_ overwrite them so be careful) and import Food Truck data:
+
+```sh
+./scripts/syndb.js
+./scripts/import_food_truck_data.js
+```
+
+### Install NPM dependencies and start the server
+
 ```sh
 nvm use # Run this if using NVM for Node version management
 npm i
 npm run dev
-curl -i http://localhost:3000/nearby?latitude=&longitude
+curl -i http://localhost:3000/nearby?latitude=&longitude=
 ```
 
 ## Provisioning
