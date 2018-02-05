@@ -2,8 +2,6 @@ const _ = require('lodash')
 const { Serializer } = require('jsonapi-serializer')
 let models = require('./models')
 
-const DEFAULT_LIMIT = 50
-
 const PUBLIC_FIELDS = [
   'name',
   'facility_type',
@@ -30,17 +28,35 @@ const foodTruckSerializer = new Serializer('food-truck', {
  * @param  {object} response Response object
  * @return {Promise}
  */
-module.exports = (request, response) => models.FoodTruck
-  .findAndCount({
+module.exports = (request, response) => {
+  const conditions = {
     where: { status: 'APPROVED' },
-    limit: DEFAULT_LIMIT
-  })
-  .then(({ rows, count }) => response({
-    meta: {
-      rows: rows.length,
-      page: 1,
-      pages: Math.ceil(parseFloat(count) / parseFloat(DEFAULT_LIMIT)),
-      total: count
-    },
-    ...foodTruckSerializer.serialize(_.invokeMap(rows, 'toJSON'))
-  }))
+    limit: request.query.limit
+  }
+
+  if (!_.isUndefined(request.query.swLatitude) &&
+    !_.isUndefined(request.query.neLatitude) &&
+    !_.isUndefined(request.query.swLongitude) &&
+    !_.isUndefined(request.query.neLongitude)) {
+    conditions.where.latitude = {
+      $gte: request.query.swLatitude,
+      $lte: request.query.neLatitude
+    }
+    conditions.where.longitude = {
+      $gte: request.query.swLongitude,
+      $lte: request.query.neLongitude
+    }
+  }
+
+  return models.FoodTruck
+    .findAndCount(conditions)
+    .then(({ rows, count }) => response({
+      meta: {
+        rows: rows.length,
+        page: 1,
+        pages: Math.ceil(parseFloat(count) / parseFloat(request.query.limit)),
+        total: count
+      },
+      ...foodTruckSerializer.serialize(_.invokeMap(rows, 'toJSON'))
+    }))
+}

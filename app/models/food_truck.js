@@ -54,8 +54,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    indexes: [{
-      fields: ['status']
-    }]
+    indexes: [
+      { fields: ['status'] },
+      { fields: ['latitude', 'longitude'] }
+    ]
   })
 }

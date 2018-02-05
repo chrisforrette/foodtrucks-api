@@ -34,7 +34,7 @@ Build the tables in the database (if you've done this before, it _will_ overwrit
 nvm use # Run this if using NVM for Node version management
 npm i
 npm run dev
-curl -i http://localhost:3000/nearby?latitude=&longitude=
+curl -i http://localhost:3000/food-trucks
 ```
 
 ## Provisioning
