@@ -24,16 +24,18 @@ const longitudeSchema = Joi
  * Joi schema for validating query string of food truck list endpoint
  * @type {object}
  */
-module.exports = Joi.object().keys({
-  limit: Joi
-    .number()
-    .integer()
-    .min(1)
-    .max(500)
-    .default(DEFAULT_LIMIT),
+module.exports = Joi
+  .object({
+    limit: Joi
+      .number()
+      .integer()
+      .min(1)
+      .max(500)
+      .default(DEFAULT_LIMIT),
 
-  neLatitude: latitudeSchema.required(),
-  neLongitude: longitudeSchema.required(),
-  swLatitude: latitudeSchema.required(),
-  swLongitude: longitudeSchema.required()
-})
+    neLatitude: latitudeSchema,
+    neLongitude: longitudeSchema,
+    swLatitude: latitudeSchema,
+    swLongitude: longitudeSchema
+  })
+  .and('neLatitude', 'neLongitude', 'swLatitude', 'swLongitude')

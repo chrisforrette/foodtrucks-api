@@ -28,27 +28,35 @@ const foodTruckSerializer = new Serializer('food-truck', {
  * @param  {object} response Response object
  * @return {Promise}
  */
-module.exports = (request, response) => models.FoodTruck
-  .findAndCount({
-    where: {
-      status: 'APPROVED',
-      latitude: {
-        $gte: request.query.swLatitude,
-        $lte: request.query.neLatitude
-      },
-      longitude: {
-        $gte: request.query.swLongitude,
-        $lte: request.query.neLongitude
-      }
-    },
+module.exports = (request, response) => {
+  const conditions = {
+    where: { status: 'APPROVED' },
     limit: request.query.limit
-  })
-  .then(({ rows, count }) => response({
-    meta: {
-      rows: rows.length,
-      page: 1,
-      pages: Math.ceil(parseFloat(count) / parseFloat(request.query.limit)),
-      total: count
-    },
-    ...foodTruckSerializer.serialize(_.invokeMap(rows, 'toJSON'))
-  }))
+  }
+
+  if (!_.isUndefined(request.query.swLatitude) &&
+    !_.isUndefined(request.query.neLatitude) &&
+    !_.isUndefined(request.query.swLongitude) &&
+    !_.isUndefined(request.query.neLongitude)) {
+    conditions.where.latitude = {
+      $gte: request.query.swLatitude,
+      $lte: request.query.neLatitude
+    }
+    conditions.where.longitude = {
+      $gte: request.query.swLongitude,
+      $lte: request.query.neLongitude
+    }
+  }
+
+  return models.FoodTruck
+    .findAndCount(conditions)
+    .then(({ rows, count }) => response({
+      meta: {
+        rows: rows.length,
+        page: 1,
+        pages: Math.ceil(parseFloat(count) / parseFloat(request.query.limit)),
+        total: count
+      },
+      ...foodTruckSerializer.serialize(_.invokeMap(rows, 'toJSON'))
+    }))
+}
