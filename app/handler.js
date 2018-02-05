@@ -4,22 +4,24 @@ let models = require('./models')
 
 const DEFAULT_LIMIT = 50
 
+const PUBLIC_FIELDS = [
+  'name',
+  'facility_type',
+  'status',
+  'food_items',
+  'days_hours',
+  'address',
+  'latitude',
+  'longitude'
+]
+
 /**
  * JSON API serializer for outputting Food Truck data for the API
  * @type {object}
  */
 const foodTruckSerializer = new Serializer('food-truck', {
   keyForAttribute: 'snake_case',
-  attributes: [
-    'name',
-    'facility_type',
-    'status',
-    'food_items',
-    'days_hours',
-    'address',
-    'latitude',
-    'longitude'
-  ]
+  attributes: PUBLIC_FIELDS
 })
 
 /**
@@ -28,7 +30,7 @@ const foodTruckSerializer = new Serializer('food-truck', {
  * @param  {object} response Response object
  * @return {Promise}
  */
-const handler = (request, response) => models.FoodTruck
+module.exports = (request, response) => models.FoodTruck
   .findAndCount({
     where: { status: 'APPROVED' },
     limit: DEFAULT_LIMIT
@@ -42,9 +44,3 @@ const handler = (request, response) => models.FoodTruck
     },
     ...foodTruckSerializer.serialize(_.invokeMap(rows, 'toJSON'))
   }))
-
-module.exports = [{
-  method: 'GET',
-  path: '/food-trucks',
-  handler
-}]
