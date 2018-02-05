@@ -21,10 +21,11 @@ Create a `.env` file in the root of the project and drop in the DB URL, swapping
 DATABASE_URL="postgres://yourusername:yourpassword@localhost/foodtrucks"
 ```
 
-Build the tables in the database (if you've done this before, it _will_ overwrite them so be careful):
+Build the tables in the database (if you've done this before, it _will_ overwrite them so be careful) and import Food Truck data:
 
 ```sh
 ./scripts/syndb.js
+./scripts/import_food_truck_data.js
 ```
 
 ### Install NPM dependencies and start the server
