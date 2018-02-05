@@ -1,8 +1,9 @@
 const _ = require('lodash')
 const Hapi = require('hapi')
+const HapiError = require('hapi-error')
 const HapiRequireHTTPS = require('hapi-require-https')
 const config = require('./config')
-const routes = require('./routes')
+const handler = require('./handler')
 
 const server = new Hapi.Server()
 
@@ -25,7 +26,7 @@ server.connection(connectionConfig)
 
 // Configure plugins
 
-const plugins = []
+const plugins = [HapiError]
 
 // Require HTTPS for staging and production environments
 
@@ -51,7 +52,13 @@ server.register(plugins, function (err) {
     throw new Error('Error registering plugins')
   }
 
-  server.route(routes)
+  // Configure food trucks route
+
+  server.route({
+    method: 'GET',
+    path: '/food-trucks',
+    handler
+  })
 })
 
 module.exports = server
