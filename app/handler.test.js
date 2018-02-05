@@ -26,7 +26,11 @@ describe('Handler', function () {
       })
     }
 
-    const request = {}
+    const request = {
+      query: {
+        limit: 50
+      }
+    }
     const response = sinon.stub()
     const mockModels = {
       FoodTruck: {
