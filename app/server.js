@@ -4,6 +4,7 @@ const HapiError = require('hapi-error')
 const HapiRequireHTTPS = require('hapi-require-https')
 const config = require('./config')
 const handler = require('./handler')
+const schema = require('./schema')
 
 const server = new Hapi.Server()
 
@@ -57,6 +58,11 @@ server.register(plugins, function (err) {
   server.route({
     method: 'GET',
     path: '/food-trucks',
+    config: {
+      validate: {
+        query: schema
+      }
+    },
     handler
   })
 })

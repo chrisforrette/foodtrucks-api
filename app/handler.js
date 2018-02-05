@@ -2,8 +2,6 @@ const _ = require('lodash')
 const { Serializer } = require('jsonapi-serializer')
 let models = require('./models')
 
-const DEFAULT_LIMIT = 50
-
 const PUBLIC_FIELDS = [
   'name',
   'facility_type',
@@ -32,14 +30,24 @@ const foodTruckSerializer = new Serializer('food-truck', {
  */
 module.exports = (request, response) => models.FoodTruck
   .findAndCount({
-    where: { status: 'APPROVED' },
-    limit: DEFAULT_LIMIT
+    where: {
+      status: 'APPROVED',
+      latitude: {
+        $gte: request.query.swLatitude,
+        $lte: request.query.neLatitude
+      },
+      longitude: {
+        $gte: request.query.swLongitude,
+        $lte: request.query.neLongitude
+      }
+    },
+    limit: request.query.limit
   })
   .then(({ rows, count }) => response({
     meta: {
       rows: rows.length,
       page: 1,
-      pages: Math.ceil(parseFloat(count) / parseFloat(DEFAULT_LIMIT)),
+      pages: Math.ceil(parseFloat(count) / parseFloat(request.query.limit)),
       total: count
     },
     ...foodTruckSerializer.serialize(_.invokeMap(rows, 'toJSON'))

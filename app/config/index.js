@@ -18,7 +18,7 @@ module.exports = convict({
   port: {
     doc: 'Port to run application on',
     format: 'port',
-    default: 3000,
+    default: 3001,
     env: 'PORT'
   },
 
