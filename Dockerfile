@@ -28,6 +28,7 @@ RUN npm install --no-optional
 USER root
 COPY .eslintrc .eslintignore .sequelizerc cluster.js ./
 COPY app ./app
+COPY scripts ./scripts
 RUN chown -R api:api /home/api
 USER api
 
