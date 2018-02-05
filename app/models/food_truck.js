@@ -4,7 +4,7 @@
  * @param  {object} sequelize Sequelize object
  * @param  {object} DataTypes Sequelize DataTypes object
  * @return {object} Food truck model object
- * @see https://sequelize.readthedocs.io/en/v3/docs/models-definition/#import
+ * @see http://docs.sequelizejs.com/manual/tutorial/models-definition.html#import
  */
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('food_truck', {
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     food_items: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.TEXT(),
       allowNull: true
     },
 
